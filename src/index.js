@@ -1,7 +1,7 @@
-import { startServer } from "./server";
+import { setupServer } from "./server.js";
 
 const bootstrap = () => {
-  startServer();
+  setupServer();
 };
 
 bootstrap();

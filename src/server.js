@@ -1,11 +1,15 @@
 import express from "express";
 import cors from "cors";
 import pino from "pino-http";
-import { env } from "./utils/env";
+import { env } from "./utils/env.js";
 
-const PORT = Number(env("PORT", "8080"));
+const PORT = Number(env("PORT", "3000"));
 
-export const startServer = () => {
+if (isNaN(PORT)) {
+  throw new Error("Invalid port number");
+}
+
+export const setupServer = () => {
   const app = express();
 
   app.use(cors());
