@@ -12,12 +12,6 @@ const contactsSchema = new Schema(
     },
     email: {
       type: String,
-      validate: {
-        validator: function (v) {
-          return /^\S+@\S+\.\S+$/.test(v);
-        },
-        message: (props) => `${props.value} is not a valid email!`,
-      },
       required: false,
     },
     isFavourite: {
