@@ -26,7 +26,6 @@ export const getContactById = async (req, res) => {
 };
 
 export const createContact = async (req, res) => {
-  console.log('Received request to create contact with body:', req.body);
   const contact = {
     name: req.body.name,
     phoneNumber: req.body.phoneNumber,
@@ -34,12 +33,27 @@ export const createContact = async (req, res) => {
     isFavourite: req.body.isFavourite,
     contactType: req.body.contactType,
   };
+
   const createdContact = await ContactService.createContact(contact);
-  console.log('Successfully created contact:', createdContact);
 
   res.status(201).json({
     status: 201,
     message: 'Successfully created a contact!',
     data: createdContact,
+  });
+};
+
+export const patchContact = async (req, res) => {
+  const { contactId } = req.params;
+  const result = await ContactService.patchContact(contactId, req.body);
+
+  if (!result) {
+    throw (createHttpError(404), 'Contact not found');
+  }
+
+  res.json({
+    status: 200,
+    message: 'Successfully patched a contact!',
+    data: result,
   });
 };

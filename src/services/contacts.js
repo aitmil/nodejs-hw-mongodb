@@ -11,3 +11,9 @@ export const getContactById = (contactId) => {
 export const createContact = (contact) => {
   return ContactsCollection.create(contact);
 };
+
+export const patchContact = (contactId, payload) => {
+  return ContactsCollection.findByIdAndUpdate(contactId, payload, {
+    new: true,
+  });
+};
