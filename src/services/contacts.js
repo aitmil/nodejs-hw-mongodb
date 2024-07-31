@@ -17,3 +17,7 @@ export const patchContact = (contactId, payload) => {
     new: true,
   });
 };
+
+export const deleteContact = (contactId) => {
+  return ContactsCollection.findByIdAndDelete(contactId);
+};

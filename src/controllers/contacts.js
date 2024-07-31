@@ -3,6 +3,7 @@ import * as ContactService from '../services/contacts.js';
 
 export const getAllContacts = async (req, res) => {
   const contacts = await ContactService.getAllContacts();
+
   res.status(200).json({
     status: 200,
     message: 'Successfully found contacts!',
@@ -51,9 +52,20 @@ export const patchContact = async (req, res) => {
     throw (createHttpError(404), 'Contact not found');
   }
 
-  res.json({
+  res.status(200).json({
     status: 200,
     message: 'Successfully patched a contact!',
     data: result,
   });
+};
+
+export const deleteContact = async (req, res) => {
+  const { contactId } = req.params;
+  const result = await ContactService.deleteContact(contactId);
+
+  if (!result) {
+    throw (createHttpError(404), 'Contact not found');
+  }
+
+  res.status(204).end();
 };
