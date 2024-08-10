@@ -7,15 +7,23 @@ export const registerUser = async (req, res) => {
     password: req.body.password,
   };
 
-  console.log('Registering user...');
-
   const registeredUser = await AuthService.registerUser(user);
-
-  console.log('User registered, sending response...');
 
   res.status(201).json({
     status: 201,
     message: 'Successfully registered a user!',
     data: registeredUser,
+  });
+};
+
+export const loginUser = async (req, res) => {
+  const { email, password } = req.body;
+
+  await AuthService.loginUser(email, password);
+
+  res.status(200).json({
+    status: 200,
+    message: 'Successfully logged in an user!',
+    // data: accessToken,
   });
 };
