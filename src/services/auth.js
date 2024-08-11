@@ -4,7 +4,6 @@ import createHttpError from 'http-errors';
 
 import { UsersCollection } from '../models/user.js';
 import { SessionsCollection } from '../models/session.js';
-import { now } from 'mongoose';
 import { ACCESS_TOKEN_TTL, REFRESH_TOKEN_TTL } from '../constants/index.js';
 
 export const registerUser = async (user) => {
