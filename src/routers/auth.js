@@ -2,7 +2,11 @@ import express from 'express';
 
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import { validateBody } from '../middlewares/validateBody.js';
-import { loginUser, registerUser } from '../controllers/auth.js';
+import {
+  loginUser,
+  refreshUserSession,
+  registerUser,
+} from '../controllers/auth.js';
 import { loginUserSchema, registerUserSchema } from '../validation/auth.js';
 
 const router = express.Router();
@@ -21,5 +25,7 @@ router.post(
   validateBody(loginUserSchema),
   ctrlWrapper(loginUser),
 );
+
+router.post('/auth/refresh', ctrlWrapper(refreshUserSession));
 
 export default router;

@@ -21,6 +21,33 @@ export const loginUser = async (req, res) => {
 
   const session = await AuthService.loginUser(email, password);
 
+  setupSession(res, session);
+
+  res.status(200).json({
+    status: 200,
+    message: 'Successfully logged in an user!',
+    data: { accessToken: session.accessToken },
+  });
+};
+
+export const refreshUserSession = async (req, res) => {
+  const session = await AuthService.refreshUserSession({
+    sessionId: req.cookies.sessionId,
+    refreshToken: req.cookies.refreshToken,
+  });
+
+  setupSession(res, session);
+
+  res.status(200).json({
+    status: 200,
+    message: 'Successfully refreshed a session!',
+    data: { accessToken: session.accessToken },
+  });
+};
+
+// -----------------------------------------------
+
+function setupSession(res, session) {
   res.cookie('refreshToken', session.refreshToken, {
     httpOnly: true,
     expires: session.refreshTokenValidUntil,
@@ -30,10 +57,4 @@ export const loginUser = async (req, res) => {
     httpOnly: true,
     expires: session.refreshTokenValidUntil,
   });
-
-  res.status(200).json({
-    status: 200,
-    message: 'Successfully logged in an user!',
-    data: { accessToken: session.accessToken },
-  });
-};
+}

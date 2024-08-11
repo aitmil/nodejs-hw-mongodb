@@ -26,16 +26,58 @@ export const loginUser = async (email, password) => {
 
   if (isMatch === false) throw createHttpError(401, 'Unauthorized access');
 
+  const newSession = createSession();
+
+  console.log('New session:', newSession);
+
+  console.log('ACCESS_TOKEN_TTL:', ACCESS_TOKEN_TTL);
+  console.log('REFRESH_TOKEN_TTL:', REFRESH_TOKEN_TTL);
+
   await SessionsCollection.deleteOne({ userId: maybeUser._id });
 
+  const session = await SessionsCollection.create({
+    userId: maybeUser._id,
+    ...newSession,
+  });
+
+  console.log('Created session:', session);
+  return session;
+};
+
+export const refreshUserSession = async ({ sessionId, refreshToken }) => {
+  const session = await SessionsCollection.findOne({
+    _id: sessionId,
+    refreshToken,
+  });
+
+  if (session === null) {
+    throw createHttpError(401, 'Session not found');
+  }
+
+  if (new Date() > new Date(session.refreshTokenValidUntil)) {
+    throw createHttpError(401, 'Session token is expired');
+  }
+
+  const newSession = createSession();
+
+  await SessionsCollection.deleteOne({ _id: sessionId, refreshToken });
+
+  return await SessionsCollection.create({
+    userId: session.userId,
+    ...newSession,
+  });
+};
+
+// -----------------------------------------------
+
+function createSession() {
   const accessToken = randomBytes(30).toString('base64');
   const refreshToken = randomBytes(30).toString('base64');
 
-  return await SessionsCollection.create({
-    userId: maybeUser._id,
+  return {
     accessToken,
     refreshToken,
-    accessTokenValidUntil: new Date(Date(now) + ACCESS_TOKEN_TTL),
-    refreshTokenValidUntil: new Date(Date(now) + REFRESH_TOKEN_TTL),
-  });
-};
+    accessTokenValidUntil: new Date(Date.now() + ACCESS_TOKEN_TTL),
+    refreshTokenValidUntil: new Date(Date.now() + REFRESH_TOKEN_TTL),
+  };
+}
