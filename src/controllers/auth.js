@@ -45,6 +45,17 @@ export const refreshUserSession = async (req, res) => {
   });
 };
 
+export const logoutUser = async (req, res) => {
+  if (req.cookies.sessionId) {
+    await AuthService.logoutUser(req.cookies.sessionId);
+  }
+
+  res.clearCookie('sessionId');
+  res.clearCookie('refreshToken');
+
+  res.status(204).end();
+};
+
 // -----------------------------------------------
 
 function setupSession(res, session) {
