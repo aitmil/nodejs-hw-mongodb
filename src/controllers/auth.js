@@ -1,5 +1,4 @@
 import * as AuthService from '../services/auth.js';
-import { REFRESH_TOKEN_TTL } from '../constants/index.js';
 
 export const registerUser = async (req, res) => {
   const user = {
