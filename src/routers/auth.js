@@ -14,21 +14,21 @@ const router = express.Router();
 const jsonParser = express.json();
 
 router.post(
-  '/auth/register',
+  '/register',
   jsonParser,
   validateBody(registerUserSchema),
   ctrlWrapper(registerUser),
 );
 
 router.post(
-  '/auth/login',
+  '/login',
   jsonParser,
   validateBody(loginUserSchema),
   ctrlWrapper(loginUser),
 );
 
-router.post('/auth/refresh', ctrlWrapper(refreshUserSession));
+router.post('/refresh', ctrlWrapper(refreshUserSession));
 
-router.post('/auth/logout', ctrlWrapper(logoutUser));
+router.post('/logout', ctrlWrapper(logoutUser));
 
 export default router;
