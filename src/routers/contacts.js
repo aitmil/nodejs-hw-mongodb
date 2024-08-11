@@ -13,9 +13,12 @@ import {
   patchContactSchema,
 } from '../validation/contacts.js';
 import { isValidId } from '../middlewares/isValidId.js';
+import { authenticate } from '../middlewares/authenticate.js';
 
 const router = express.Router();
 const jsonParser = express.json();
+
+router.use(authenticate);
 
 router.get('/contacts', ctrlWrapper(getAllContacts));
 
