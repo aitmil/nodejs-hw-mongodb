@@ -1,4 +1,5 @@
 import * as AuthService from '../services/auth.js';
+import { REFRESH_TOKEN_TTL } from '../constants/index.js';
 
 export const registerUser = async (req, res) => {
   const user = {
@@ -19,11 +20,21 @@ export const registerUser = async (req, res) => {
 export const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
-  await AuthService.loginUser(email, password);
+  const session = await AuthService.loginUser(email, password);
+
+  res.cookie('refreshToken', session.refreshToken, {
+    httpOnly: true,
+    expires: session.refreshTokenValidUntil,
+  });
+
+  res.cookie('sessionId', session._id, {
+    httpOnly: true,
+    expires: session.refreshTokenValidUntil,
+  });
 
   res.status(200).json({
     status: 200,
     message: 'Successfully logged in an user!',
-    // data: accessToken,
+    data: { accessToken: session.accessToken },
   });
 };
