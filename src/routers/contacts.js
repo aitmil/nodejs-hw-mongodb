@@ -18,14 +18,13 @@ import { authenticate } from '../middlewares/authenticate.js';
 const router = express.Router();
 const jsonParser = express.json();
 
-router.use(authenticate);
+router.get('/', authenticate, ctrlWrapper(getAllContacts));
 
-router.get('/', ctrlWrapper(getAllContacts));
-
-router.get('/:contactId', isValidId, ctrlWrapper(getContactById));
+router.get('/:contactId', authenticate, isValidId, ctrlWrapper(getContactById));
 
 router.post(
   '/',
+  authenticate,
   jsonParser,
   validateBody(createContactSchema),
   ctrlWrapper(createContact),
@@ -33,12 +32,18 @@ router.post(
 
 router.patch(
   '/:contactId',
+  authenticate,
   jsonParser,
   isValidId,
   validateBody(patchContactSchema),
   ctrlWrapper(patchContact),
 );
 
-router.delete('/:contactId', isValidId, ctrlWrapper(deleteContact));
+router.delete(
+  '/:contactId',
+  authenticate,
+  isValidId,
+  ctrlWrapper(deleteContact),
+);
 
 export default router;
