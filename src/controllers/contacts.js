@@ -29,17 +29,13 @@ export const getContactById = async (req, res, next) => {
   const { contactId } = req.params;
   const userId = req.user._id;
 
-  console.log('contactId:', contactId);
-  console.log('userId:', userId);
-
   const contact = await ContactService.getContactById(contactId, userId);
 
-  if (!contact) {
+  if (
+    contact === null ||
+    contact.userId.toString() !== req.user._id.toString()
+  ) {
     return next(createHttpError(404, 'Contact not found'));
-  }
-
-  if (contact.userId.toString() !== req.user._id.toString()) {
-    return next(createHttpError(403, 'Not authorized to access this contact'));
   }
 
   res.status(200).json({
@@ -68,86 +64,34 @@ export const createContact = async (req, res) => {
   });
 };
 
-// export const patchContact = async (req, res, next) => {
-//   const { contactId } = req.params;
-//   const userId = req.user._id;
-
-//   const result = await ContactService.patchContact(contactId, userId, req.body);
-
-//   if (!result) {
-//     return next(createHttpError(404, 'Contact not found'));
-//   }
-
-//   if (result.userId.toString() !== req.user._id.toString()) {
-//     return next(createHttpError(403, 'Contact not allowed'));
-//   }
-
-//   res.status(200).json({
-//     status: 200,
-//     message: 'Successfully patched a contact!',
-//     data: result,
-//   });
-// };
-
 export const patchContact = async (req, res, next) => {
   const { contactId } = req.params;
-  const userId = req.user._id;
 
-  const contact = await ContactService.getContactById(contactId, userId);
-
-  if (!contact) {
-    return next(createHttpError(404, 'Contact not found'));
-  }
-
-  if (contact.userId.toString() !== userId.toString()) {
-    return next(createHttpError(403, 'Not authorized to update this contact'));
-  }
-
-  const updatedContact = await ContactService.patchContact(
+  const result = await ContactService.patchContact(
     contactId,
-    userId,
+    req.user._id,
     req.body,
   );
 
-  res.status(200).json({
-    status: 200,
-    message: 'Successfully patched the contact!',
-    data: updatedContact,
-  });
-};
-
-// export const deleteContact = async (req, res, next) => {
-//   const { contactId } = req.params;
-// const userId = req.user._id;
-
-//   const result = await ContactService.deleteContact(contactId, userId);
-
-//   if (!result) {
-//     return next(createHttpError(404, 'Contact not found'));
-//   }
-
-//   if (result.userId.toString() !== req.user._id.toString()) {
-//     return next(createHttpError(403, 'Contact not allowed'));
-//   }
-
-//   res.status(204).end();
-// };
-
-export const deleteContact = async (req, res, next) => {
-  const { contactId } = req.params;
-  const userId = req.user._id;
-
-  const contact = await ContactService.getContactById(contactId, userId);
-
-  if (!contact) {
+  if (result === null || result.userId.toString() !== req.user._id.toString()) {
     return next(createHttpError(404, 'Contact not found'));
   }
 
-  if (contact.userId.toString() !== userId.toString()) {
-    return next(createHttpError(403, 'Not authorized to delete this contact'));
-  }
+  res.status(200).json({
+    status: 200,
+    message: 'Successfully patched a contact!',
+    data: result,
+  });
+};
 
-  await ContactService.deleteContact(contactId, userId);
+export const deleteContact = async (req, res, next) => {
+  const { contactId } = req.params;
+
+  const result = await ContactService.deleteContact(contactId, req.user._id);
+
+  if (result === null || result.userId.toString() !== req.user._id.toString()) {
+    return next(createHttpError(404, 'Contact not found'));
+  }
 
   res.status(204).end();
 };

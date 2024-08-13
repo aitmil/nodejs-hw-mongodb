@@ -48,39 +48,14 @@ export const createContact = (contact) => {
   return ContactsCollection.create(contact);
 };
 
-// export const patchContact = (contactId, userId, payload) => {
-//   return ContactsCollection.findOneAndUpdate(
-//     { _id: contactId, userId },
-//     payload,
-//     {
-//       new: true,
-//     },
-//   );
-// };
-
-export const patchContact = async (contactId, userId, payload) => {
-  console.log('Updating contact with ID:', contactId);
-  console.log('User ID:', userId);
-
-  const contact = await ContactsCollection.findOne({ _id: contactId, userId });
-  if (!contact) {
-    console.log('Contact not found');
-    return null;
-  }
-
-  console.log('Found contact:', contact);
-
-  const updatedContact = await ContactsCollection.findOneAndUpdate(
+export const patchContact = (contactId, userId, payload) => {
+  return ContactsCollection.findOneAndUpdate(
     { _id: contactId, userId },
     payload,
     {
       new: true,
     },
   );
-
-  console.log('Updated contact:', updatedContact);
-
-  return updatedContact;
 };
 
 export const deleteContact = (contactId, userId) => {
