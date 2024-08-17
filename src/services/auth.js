@@ -121,6 +121,33 @@ export const sendResetEmail = async (email) => {
     );
   }
 };
+
+export const resetPwd = async (password, token) => {
+  try {
+    const decoded = jwt.verify(token, env('JWT_SECRET'));
+
+    const user = await UsersCollection.findOne({
+      _id: decoded.sub,
+      email: decoded.email,
+    });
+
+    if (user === null) {
+      throw createHttpError(404, 'User not found');
+    }
+
+    const encryptedPwd = await bcrypt.hash(password, 10);
+
+    await UsersCollection.findByIdAndUpdate(user._id, {
+      password: encryptedPwd,
+    });
+  } catch (err) {
+    if (err.name === 'TokenExpiredError' || err.name === 'JsonWebTokenError') {
+      throw createHttpError(401, 'Token is expired or invalid.');
+    }
+    throw err;
+  }
+};
+
 // -----------------------------------------------
 
 function createSession() {

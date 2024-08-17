@@ -66,6 +66,18 @@ export const sendResetEmail = async (req, res) => {
   });
 };
 
+export const resetPwd = async (req, res) => {
+  const { password, token } = req.body;
+
+  await AuthService.resetPwd(password, token);
+
+  res.status(200).json({
+    status: 200,
+    message: 'Password has been successfully reset.',
+    data: {},
+  });
+};
+
 // -----------------------------------------------
 
 function setupSession(res, session) {
