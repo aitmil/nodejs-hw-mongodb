@@ -56,6 +56,16 @@ export const logoutUser = async (req, res) => {
   res.status(204).end();
 };
 
+export const sendResetEmail = async (req, res) => {
+  await AuthService.sendResetEmail(req.body.email);
+
+  res.status(200).json({
+    status: 200,
+    message: 'Reset password email has been successfully sent.',
+    data: {},
+  });
+};
+
 // -----------------------------------------------
 
 function setupSession(res, session) {

@@ -7,8 +7,13 @@ import {
   logoutUser,
   refreshUserSession,
   registerUser,
+  sendResetEmail,
 } from '../controllers/auth.js';
-import { loginUserSchema, registerUserSchema } from '../validation/auth.js';
+import {
+  loginUserSchema,
+  registerUserSchema,
+  sendResetEmailSchema,
+} from '../validation/auth.js';
 
 const router = express.Router();
 const jsonParser = express.json();
@@ -30,5 +35,12 @@ router.post(
 router.post('/refresh', ctrlWrapper(refreshUserSession));
 
 router.post('/logout', ctrlWrapper(logoutUser));
+
+router.post(
+  '/send-reset-email',
+  jsonParser,
+  validateBody(sendResetEmailSchema),
+  ctrlWrapper(sendResetEmail),
+);
 
 export default router;
