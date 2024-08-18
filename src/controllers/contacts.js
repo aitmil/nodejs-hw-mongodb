@@ -3,6 +3,9 @@ import * as ContactService from '../services/contacts.js';
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 import { parseSortParams } from '../utils/parseSortParams.js';
 import { parseFilterParams } from '../utils/parseFilterParams.js';
+import { saveFileToUploadDir } from '../utils/saveFileToUploadDir.js';
+import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
+import { env } from '../utils/env.js';
 
 export const getAllContacts = async (req, res) => {
   const { page, perPage } = parsePaginationParams(req.query);
@@ -46,6 +49,18 @@ export const getContactById = async (req, res, next) => {
 };
 
 export const createContact = async (req, res) => {
+  const photo = req.file;
+
+  let photoUrl;
+
+  if (photo) {
+    if (env('ENABLE_CLOUDINARY') === 'true') {
+      photoUrl = await saveFileToCloudinary(photo);
+    } else {
+      photoUrl = await saveFileToUploadDir(photo);
+    }
+  }
+
   const contact = {
     name: req.body.name,
     phoneNumber: req.body.phoneNumber,
@@ -53,6 +68,7 @@ export const createContact = async (req, res) => {
     isFavourite: req.body.isFavourite,
     contactType: req.body.contactType,
     userId: req.user._id,
+    photo: photoUrl,
   };
 
   const createdContact = await ContactService.createContact(contact);
@@ -66,12 +82,22 @@ export const createContact = async (req, res) => {
 
 export const patchContact = async (req, res, next) => {
   const { contactId } = req.params;
+  const photo = req.file;
 
-  const result = await ContactService.patchContact(
-    contactId,
-    req.user._id,
-    req.body,
-  );
+  let photoUrl;
+
+  if (photo) {
+    if (env('ENABLE_CLOUDINARY') === 'true') {
+      photoUrl = await saveFileToCloudinary(photo);
+    } else {
+      photoUrl = await saveFileToUploadDir(photo);
+    }
+  }
+
+  const result = await ContactService.patchContact(contactId, req.user._id, {
+    ...req.body,
+    photoUrl,
+  });
 
   if (result === null || result.userId.toString() !== req.user._id.toString()) {
     return next(createHttpError(404, 'Contact not found'));
