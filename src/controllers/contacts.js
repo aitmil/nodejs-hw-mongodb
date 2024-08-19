@@ -96,7 +96,7 @@ export const patchContact = async (req, res, next) => {
 
   const result = await ContactService.patchContact(contactId, req.user._id, {
     ...req.body,
-    photoUrl,
+    photo: photoUrl,
   });
 
   if (result === null || result.userId.toString() !== req.user._id.toString()) {
