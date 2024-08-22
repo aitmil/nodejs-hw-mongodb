@@ -6,7 +6,10 @@
   "scripts": {
     "lint": "eslint src/**/*.js",
     "start": "node ./src/index.js",
-    "dev": "nodemon src/index.js"
+    "dev": "nodemon src/index.js",
+    "build": "npm run build-docs",
+    "build-docs": "redocly bundle --ext json -o docs/swagger.json",
+    "preview-docs": "redocly preview-docs"
   },
   "keywords": [],
   "author": "Anna Taranchuk <taranchuk4@yahoo.com>",
@@ -31,6 +34,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.7.0",
+    "@redocly/cli": "^1.20.1",
     "eslint": "^9.7.0",
     "globals": "^15.8.0",
     "nodemon": "^3.1.4",
