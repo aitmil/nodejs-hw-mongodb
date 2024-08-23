@@ -39,12 +39,12 @@ requestBody:
             type: string
             example: johndoe@example.com
           isFavourite:
-            description: Weather is favourite contact or not
+            description: Whether is favourite contact or not
             type: boolean
             default: false
             example: true
           photo:
-            description: "Contact's photo file or URL"
+            description: "Contact's photo file"
             type: string
             format: binary
             example: 'file.jpg'
