@@ -5,6 +5,8 @@ required:
   - phoneNumber
   - contactType
   - userId
+  - createdAt
+  - updatedAt
 properties:
   _id:
     description: Contact's id"
@@ -29,7 +31,7 @@ properties:
     default: personal
     example: work
   isFavourite:
-    description: Weather is favourite contact or not
+    description: Whether is favourite contact or not
     type: boolean
     default: false
     example: true

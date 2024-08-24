@@ -32,10 +32,6 @@ requestBody:
             enum: ['work', 'home', 'personal']
             default: personal
             example: work
-          userId:
-            description: "Contact's user id"
-            type: string
-            example: 66bb2c04d348911e38a4e9c1
           email:
             description: "Contact's email"
             type: string
@@ -50,7 +46,6 @@ requestBody:
             type: string
             format: binary
             example: 'file.jpg'
-
 responses:
   '200':
     description: Updates a contact
