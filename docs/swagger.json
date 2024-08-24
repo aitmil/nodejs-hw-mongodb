@@ -196,8 +196,7 @@
                 "required": [
                   "name",
                   "phoneNumber",
-                  "contactType",
-                  "userId"
+                  "contactType"
                 ],
                 "properties": {
                   "name": {
@@ -221,24 +220,19 @@
                     "default": "personal",
                     "example": "work"
                   },
-                  "userId": {
-                    "description": "Contact's user id",
-                    "type": "string",
-                    "example": "66bb2c04d348911e38a4e9c1"
-                  },
                   "email": {
                     "description": "Contact's email",
                     "type": "string",
                     "example": "johndoe@example.com"
                   },
                   "isFavourite": {
-                    "description": "Weather is favourite contact or not",
+                    "description": "Whether is favourite contact or not",
                     "type": "boolean",
                     "default": false,
                     "example": true
                   },
                   "photo": {
-                    "description": "Contact's photo file or URL",
+                    "description": "Contact's photo file",
                     "type": "string",
                     "format": "binary",
                     "example": "file.jpg"
@@ -396,18 +390,13 @@
                     "default": "personal",
                     "example": "work"
                   },
-                  "userId": {
-                    "description": "Contact's user id",
-                    "type": "string",
-                    "example": "66bb2c04d348911e38a4e9c1"
-                  },
                   "email": {
                     "description": "Contact's email",
                     "type": "string",
                     "example": "johndoe@example.com"
                   },
                   "isFavourite": {
-                    "description": "Weather is favourite contact or not",
+                    "description": "Whether is favourite contact or not",
                     "type": "boolean",
                     "default": false,
                     "example": true
@@ -869,7 +858,9 @@
           "name",
           "phoneNumber",
           "contactType",
-          "userId"
+          "userId",
+          "createdAt",
+          "updatedAt"
         ],
         "properties": {
           "_id": {
@@ -904,7 +895,7 @@
             "example": "work"
           },
           "isFavourite": {
-            "description": "Weather is favourite contact or not",
+            "description": "Whether is favourite contact or not",
             "type": "boolean",
             "default": false,
             "example": true
